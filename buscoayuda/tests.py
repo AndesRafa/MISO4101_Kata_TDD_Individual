@@ -67,8 +67,7 @@ class Kata_TDD_Test(TestCase):
 
         self.assertIn('Juan Daniel Arevalo', span.text)
 
-
-def test_verDetalle(self):
+    def test_verDetalle(self):
         driver = self.browser
         driver.get('http://localhost:8000')
         span = driver.find_element(
