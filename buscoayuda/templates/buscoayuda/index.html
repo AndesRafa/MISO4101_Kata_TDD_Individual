@@ -34,7 +34,6 @@
     <h1>Busco Ayuda</h1>
     <p>Encuentra aquí la ayuda que necesitas.</p>
   </div>
-  {% if not user.is_authenticated %}
   <form class="navbar-form navbar-right" role="search">
     <div class="input-group">
       <input type="text" class="form-control" placeholder="Buscar" name="srch-term" id="buscar">
@@ -52,12 +51,12 @@
         <div class="panel-heading" style="text-align: center; background-color: black;">
           <span style="color: white; font-size: large;">{{ trabajador.tiposDeServicio.nombre }}</span>
           <!--suppress HtmlUnknownTarget -->
-          <img src="https://miso4202.s3.amazonaws.com/{{ trabajador.tiposDeServicio.imagen }}" />
+          <!-- <img src="https://miso4202.s3.amazonaws.com/{{ trabajador.tiposDeServicio.imagen }}" /> -->
         </div>
         <div class="panel-body" style="text-align: center">
           <a class="trabajador" href="#" data-form="{{ trabajador.id }}" style="text-decoration: none;">
             <!--suppress HtmlUnknownTarget -->
-            <img class="thumbnail img-responsive center-block" src="https://miso4202.s3.amazonaws.com/{{ trabajador.imagen }}" width="300" height="300">
+            <!-- <img class="thumbnail img-responsive center-block" src="https://miso4202.s3.amazonaws.com/{{ trabajador.imagen }}" width="300" height="300"> -->
             <span>{{ trabajador.nombre }} {{ trabajador.apellidos }}</span>
           </a>
         </div>
@@ -65,13 +64,18 @@
     </div>
     {% endfor %}
   </div>
-  {% endif %} {% include "buscoayuda/registro.html" %}
+  {% include "buscoayuda/registro.html" %}
 </body>
 
 <script type="text/javascript">
   $(document).ready(function() {
     $('#id_register').click(function() {
       $('#register_modal').modal();
+    });
+    $('.trabajador').click(function() {
+      var trabajador = $(this).data("form");
+      localStorage.setItem('trabajador', trabajador);
+      window.location = "/detail";
     });
   });
 </script>
