@@ -78,3 +78,30 @@ class Kata_TDD_Test(TestCase):
             By.XPATH, '//h2[text()="Juan Daniel Arevalo"]')
 
         self.assertIn('Juan Daniel Arevalo', h2.text)
+
+    def test_login(self):
+        driver = self.browser
+        driver.get('http://localhost:8000')
+        link = driver.find_element_by_id('id_login')
+        link.click()
+
+        wait = WebDriverWait(driver, 10)
+
+        wait.until(
+            EC.element_to_be_clickable((By.ID, 'login_modal')))
+
+        nombreUsuario = driver.find_element_by_id('id_username')
+        nombreUsuario.send_keys('juan645')
+
+        clave = driver.find_element_by_id('id_password')
+        clave.send_keys('clave123')
+
+        botonIngresar = driver.find_element_by_id('id_grabar')
+        botonIngresar.click()
+
+        wait.until(
+            EC.element_to_be_clickable((By.ID, 'logout')))
+
+        welcome = driver.find_element_by_id('welcome_user')
+
+        self.assertIn('Juan Daniel', welcome.text)
