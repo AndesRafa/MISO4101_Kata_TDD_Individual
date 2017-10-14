@@ -8,6 +8,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
 # Create your tests here.
+
+
 class Kata_TDD_Test(TestCase):
 
     def setUp(self):
@@ -27,12 +29,9 @@ class Kata_TDD_Test(TestCase):
         link = driver.find_element_by_id('id_register')
         link.click()
 
-        for handles in driver.window_handles:
-            driver.switch_to_window(handles)
-            print('\n- ' + handles)
-
-        wait = WebDriverWait(driver, 10);
-        element = wait.until(EC.element_to_be_clickable((By.ID, 'register_modal')))
+        wait = WebDriverWait(driver, 10)
+        element = wait.until(
+            EC.element_to_be_clickable((By.ID, 'register_modal')))
 
         nombre = driver.find_element_by_id('id_nombre')
         nombre.send_keys('Juan Daniel')
@@ -43,7 +42,8 @@ class Kata_TDD_Test(TestCase):
         experiencia = driver.find_element_by_id('id_aniosExperiencia')
         experiencia.send_keys('5')
 
-        driver.find_element_by_xpath("//select[@id='id_tiposDeServicio']/option[text()='Desarrollador Web']").click()
+        driver.find_element_by_xpath(
+            "//select[@id='id_tiposDeServicio']/option[text()='Desarrollador Web']").click()
         telefono = driver.find_element_by_id('id_telefono')
         telefono.send_keys('3173024578')
 
@@ -62,6 +62,20 @@ class Kata_TDD_Test(TestCase):
         botonGrabar = driver.find_element_by_id('id_grabar')
         botonGrabar.click()
         driver.implicitly_wait(3)
-        span=driver.find_element(By.XPATH, '//span[text()="Juan Daniel Arevalo"]')
+        span = driver.find_element(
+            By.XPATH, '//span[text()="Juan Daniel Arevalo"]')
 
         self.assertIn('Juan Daniel Arevalo', span.text)
+
+
+def test_verDetalle(self):
+        driver = self.browser
+        driver.get('http://localhost:8000')
+        span = driver.find_element(
+            By.XPATH, '//span[text()="Juan Daniel Arevalo"]')
+        span.click()
+
+        h2 = driver.find_element(
+            By.XPATH, '//h2[text()="Juan Daniel Arevalo"]')
+
+        self.assertIn('Juan Daniel Arevalo', h2.text)
