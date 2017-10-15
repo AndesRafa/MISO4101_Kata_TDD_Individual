@@ -82,3 +82,17 @@ class UserForm(ModelForm):
     class Meta:
         model = User
         fields = ['username', 'password']
+
+class UserLoginForm(ModelForm):
+    username = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'form-control', 'id': 'id_login_username'}),
+        label='Usuario'
+    )
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'id': 'id_login_password'}),
+        label='Contraseña'
+    )
+
+    class Meta:
+        model = User
+        fields = ['username', 'password']

@@ -6,27 +6,30 @@ from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect, HttpResponse
 
 
-from .models import TiposDeServicio, Trabajador, TrabajadorForm, UserForm
+from .models import TiposDeServicio, Trabajador, TrabajadorForm, UserForm, UserLoginForm
 
 
 def index(request):
+
+    # auth.logout(request)
     trabajadores = Trabajador.objects.all()
     tipos_de_servicios = TiposDeServicio.objects.all()
     form_trabajador = TrabajadorForm(request.POST)
     form_usuario = UserForm(request.POST)
+    form_login_usuario = UserLoginForm(request.POST)
 
     context = {'trabajadores': trabajadores,
                'tipos_de_servicios': tipos_de_servicios,
                'form_trabajador': form_trabajador,
                'form_usuario': form_usuario,
+               'form_login_usuario': form_login_usuario,
                'base_url': settings.STATIC_URL}
 
     my_user = auth.get_user(request)
 
-    if my_user.is_authenticated:
+    if my_user is not None and my_user.is_authenticated:
         context['user_name'] = trabajadores.filter(usuarioId=my_user).first().nombre
-    # context = {'trabajadores': trabajadores, 'tipos_de_servicios': tipos_de_servicios,
-    #            'form_trabajador': form_trabajador, 'form_usuario': form_usuario, 'base_url': settings.STATIC_URL}
+        
     return render(request, 'buscoayuda/index.html', context)
 
 
@@ -69,6 +72,9 @@ def detail(request, pk):
 def login(request):
     username = request.POST.get('username', '')
     password = request.POST.get('password', '')
+
+
+    # import IPython; IPython.embed()
     user = auth.authenticate(username=username, password=password)
     if user is not None:
         auth.login(request, user)

@@ -1,6 +1,7 @@
 #from unittest import TestCase
 
 from django.test import TestCase
+
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
@@ -16,6 +17,17 @@ class Kata_TDD_Test(TestCase):
         self.browser = webdriver.Firefox()
         self.browser.implicitly_wait(2)
 
+        self.testData = {
+            'nombre': 'Juan Daniel',
+            'apellidos': 'Arevalo',
+            'experiencia': '5',
+            'telefono': '3173024578',
+            'correo': 'jd.patino1@uniandes.edu.co',
+            'imagen': '/home/kubuntu/Pictures/daman.jpeg',
+            'nombre_usuario': 'juan645',
+            'clave': 'clave123',
+        }
+
     def tearDown(self):
         self.browser.quit()
 
@@ -24,6 +36,7 @@ class Kata_TDD_Test(TestCase):
         self.assertIn('Busco Ayuda', self.browser.title)
 
     def test_registro(self):
+        testData = self.testData
         driver = self.browser
         driver.get('http://localhost:8000')
         link = driver.find_element_by_id('id_register')
@@ -34,30 +47,30 @@ class Kata_TDD_Test(TestCase):
             EC.element_to_be_clickable((By.ID, 'register_modal')))
 
         nombre = driver.find_element_by_id('id_nombre')
-        nombre.send_keys('Juan Daniel')
+        nombre.send_keys(testData.get('nombre'))
 
         apellidos = driver.find_element_by_id('id_apellidos')
-        apellidos.send_keys('Arevalo')
+        apellidos.send_keys(testData.get('apellidos'))
 
         experiencia = driver.find_element_by_id('id_aniosExperiencia')
-        experiencia.send_keys('5')
+        experiencia.send_keys(testData.get('experiencia'))
 
         driver.find_element_by_xpath(
             "//select[@id='id_tiposDeServicio']/option[text()='Desarrollador Web']").click()
         telefono = driver.find_element_by_id('id_telefono')
-        telefono.send_keys('3173024578')
+        telefono.send_keys(testData.get('telefono'))
 
         correo = driver.find_element_by_id('id_correo')
-        correo.send_keys('jd.patino1@uniandes.edu.co')
+        correo.send_keys(testData.get('correo'))
 
         imagen = driver.find_element_by_id('id_imagen')
-        imagen.send_keys('/home/kubuntu/Pictures/daman.jpeg')
+        imagen.send_keys(testData.get('imagen'))
 
         nombreUsuario = driver.find_element_by_id('id_username')
-        nombreUsuario.send_keys('juan645')
+        nombreUsuario.send_keys(testData.get('nombre_usuario'))
 
         clave = driver.find_element_by_id('id_password')
-        clave.send_keys('clave123')
+        clave.send_keys(testData.get('clave'))
 
         botonGrabar = driver.find_element_by_id('id_grabar')
         botonGrabar.click()
@@ -80,6 +93,7 @@ class Kata_TDD_Test(TestCase):
         self.assertIn('Juan Daniel Arevalo', h2.text)
 
     def test_login(self):
+        testData = self.testData
         driver = self.browser
         driver.get('http://localhost:8000')
         link = driver.find_element_by_id('id_login')
@@ -90,13 +104,13 @@ class Kata_TDD_Test(TestCase):
         wait.until(
             EC.element_to_be_clickable((By.ID, 'login_modal')))
 
-        nombreUsuario = driver.find_element_by_id('id_username')
-        nombreUsuario.send_keys('juan645')
+        nombreUsuario = driver.find_element_by_id('id_login_username')
+        nombreUsuario.send_keys(testData.get('nombre_usuario'))
 
-        clave = driver.find_element_by_id('id_password')
-        clave.send_keys('clave123')
+        clave = driver.find_element_by_id('id_login_password')
+        clave.send_keys(testData.get('clave'))
 
-        botonIngresar = driver.find_element_by_id('id_grabar')
+        botonIngresar = driver.find_element_by_id('id_ingresar')
         botonIngresar.click()
 
         wait.until(
@@ -104,4 +118,4 @@ class Kata_TDD_Test(TestCase):
 
         welcome = driver.find_element_by_id('welcome_user')
 
-        self.assertIn('Juan Daniel', welcome.text)
+        self.assertIn(testData.get('nombre'), welcome.text)
