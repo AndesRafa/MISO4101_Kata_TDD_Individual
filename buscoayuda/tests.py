@@ -28,6 +28,11 @@ class Kata_TDD_Test(TestCase):
             'clave': 'clave123',
         }
 
+        self.testComment = {
+            'correo': 'correo@dominio.com',
+            'comentario': 'Cortez y eficiente!!'
+        }
+
     def tearDown(self):
         self.browser.quit()
 
@@ -119,3 +124,33 @@ class Kata_TDD_Test(TestCase):
         welcome = driver.find_element_by_id('welcome_user')
 
         self.assertIn(testData.get('nombre'), welcome.text)
+
+    def test_comentario(self):
+        testComment = self.testComment
+        driver = self.browser
+        driver.get('http://localhost:8000')
+
+        span = driver.find_element(
+            By.XPATH, '//span[text()="Juan Daniel Arevalo"]')
+        span.click()
+
+        wait = WebDriverWait(driver, 10)
+
+        submit = wait.until(
+            EC.element_to_be_clickable((By.CLASS_NAME, 'btn-success')))
+
+        correo = driver.find_element_by_id('correo')
+        correo.send_keys(testComment.get('correo'))
+
+        comentario = driver.find_element_by_id('comentario')
+        comentario.send_keys(testComment.get('comentario'))
+
+        submit.click()
+
+        paragraph = driver.find_element(
+            By.XPATH, '//h4[text()="{}"]'.format(testComment.get('correo')))
+
+        paragraph = wait.until(
+            EC.element_to_be_clickable((By.XPATH, '//h4[text()="{}"]'.format(testComment.get('correo')))))
+
+        self.assertIn(testComment.get('correo'), paragraph.text)

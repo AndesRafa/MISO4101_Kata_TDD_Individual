@@ -1,3 +1,4 @@
+from django.shortcuts import render
 from django.conf import settings
 from django.shortcuts import render, get_object_or_404
 from django.core import serializers
@@ -8,9 +9,13 @@ from django.http import HttpResponseRedirect, HttpResponse
 
 from .models import TiposDeServicio, Trabajador, TrabajadorForm, UserForm, UserLoginForm
 
+from django.views.decorators.csrf import csrf_exempt
+
+
+from .models import TiposDeServicio, Trabajador, TrabajadorForm, UserForm, UserLoginForm, Comentario
+
 
 def index(request):
-
     # auth.logout(request)
     trabajadores = Trabajador.objects.all()
     tipos_de_servicios = TiposDeServicio.objects.all()
@@ -29,7 +34,6 @@ def index(request):
 
     if my_user is not None and my_user.is_authenticated:
         context['user_name'] = trabajadores.filter(usuarioId=my_user).first().nombre
-        
     return render(request, 'buscoayuda/index.html', context)
 
 
@@ -73,7 +77,6 @@ def login(request):
     username = request.POST.get('username', '')
     password = request.POST.get('password', '')
 
-
     # import IPython; IPython.embed()
     user = auth.authenticate(username=username, password=password)
     if user is not None:
@@ -85,3 +88,21 @@ def login(request):
         messages.error(
             request, "¡El usuario o la contraseña son incorrectos!", extra_tags="alert-danger")
         return HttpResponseRedirect('/')
+
+@csrf_exempt
+def add_comment(request):
+    if request.method == 'POST':
+        new_comment = Comentario(texto=request.POST.get('texto'),
+                                 trabajador=Trabajador.objects.get(
+                                     pk=request.POST.get('trabajador')),
+                                 correo=request.POST.get('correo'))
+        new_comment.save()
+    return HttpResponse(serializers.serialize("json", [new_comment]))
+
+
+@csrf_exempt
+def mostrarComentarios(request, idTrabajador):
+    lista_comentarios = Comentario.objects.filter(
+        trabajador=Trabajador.objects.get(pk=idTrabajador))
+
+    return HttpResponse(serializers.serialize("json", lista_comentarios))

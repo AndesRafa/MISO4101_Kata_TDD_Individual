@@ -4,7 +4,6 @@ from django import forms
 from django.db import models
 from django.forms import ModelForm
 from django.contrib.auth.models import User
-
 # MODEL CLASSES
 
 
@@ -83,6 +82,7 @@ class UserForm(ModelForm):
         model = User
         fields = ['username', 'password']
 
+
 class UserLoginForm(ModelForm):
     username = forms.CharField(
         widget=forms.TextInput(attrs={'class': 'form-control', 'id': 'id_login_username'}),
@@ -96,3 +96,9 @@ class UserLoginForm(ModelForm):
     class Meta:
         model = User
         fields = ['username', 'password']
+
+
+class Comentario(models.Model):
+    texto = models.CharField(max_length=1000)
+    trabajador = models.ForeignKey(Trabajador, null=True)
+    correo = models.CharField(max_length=1000)

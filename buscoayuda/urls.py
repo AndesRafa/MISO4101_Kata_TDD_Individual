@@ -11,4 +11,7 @@ urlpatterns = [
     url(r'^detail', views.detalle_trabajador),
 
     url(r'^login$', views.login),
+
+    url(r'^addComment', views.add_comment),
+    url(r'^mostrarComentarios/(?P<idTrabajador>\d+)$', views.mostrarComentarios),
 ]

@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html>
-
+  <head>
+    <meta charset="utf-8">
+    <title>Indice</title>
+  </head>
+  <body>
+    <h1>Bienvenido a la página de inicio</h1>
+  </body>
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -40,7 +46,7 @@
   <div class="jumbotron" style="padding-left: 20px; height: 50%">
     <h1>Busco Ayuda</h1>
     <p>Encuentra aquí la ayuda que necesitas.</p>
-    {% if user.is_authenticated %}
+    {% if user.is_authenticated and not user.is_superuser  %}
     <p id="welcome_user">Bienvenido {{user_name}}</p>
     {% endif %}
   </div>
@@ -102,5 +108,4 @@
     });
   });
 </script>
-
 </html>
