@@ -147,9 +147,6 @@ class Kata_TDD_Test(TestCase):
 
         submit.click()
 
-        paragraph = driver.find_element(
-            By.XPATH, '//h4[text()="{}"]'.format(testComment.get('correo')))
-
         paragraph = wait.until(
             EC.element_to_be_clickable((By.XPATH, '//h4[text()="{}"]'.format(testComment.get('correo')))))
 
